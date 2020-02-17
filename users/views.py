@@ -37,8 +37,10 @@ class UserDetailsView(RetrieveUpdateAPIView):
         https://github.com/Tivix/django-rest-auth/issues/275
         """
         return get_user_model().objects.none()
+
 def accountView(request):
     return render(request,'confirm.html')
+
 def loginView(request):
     pass
 

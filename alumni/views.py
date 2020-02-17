@@ -7,7 +7,7 @@ from .serializers import AlumniSerializer
 
 
 @api_view()
-def alumni(request):
+def alumni_api(request):
     obj_alumni = Alumni.objects.all()
     # obj_year = []
     # for i in obj_alumni:obj_year.append(i.year)
@@ -17,3 +17,15 @@ def alumni(request):
     dict = {'alum':serializer.data}
     # return render(request,'alumni.html',context=dict)
     return Response(dict)
+
+@api_view()
+def alumni(request):
+    obj_alumni = Alumni.objects.all()
+    obj_year = []
+    for i in obj_alumni:obj_year.append(i.year)
+    new_lst = list(set(obj_year))
+    new_lst.sort()
+    # serializer = AlumniSerializer(obj_alumni,many=True)
+    dict = {'alum':new_lst}
+    return render(request,'alumni.html',context=dict)
+    # return Response(dict)
