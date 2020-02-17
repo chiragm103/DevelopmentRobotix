@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser,PermissionsMixin,BaseUserManager
+from roboPortal.models import portalUser
 # Create your models here.
 
 class UserProfileManager(BaseUserManager):
@@ -11,7 +12,8 @@ class UserProfileManager(BaseUserManager):
         user = self.model(email=email,name=name,phone_no=phone_no)
         user.set_password(password)
         user.save(using=self._db)
-
+        a= portalUser(user = user)
+        a.save()
         return user
 
     def create_superuser(self,email,name,phone_no,password):

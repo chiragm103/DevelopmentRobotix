@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'extras',
     'alumni',
     'users',
+    'roboPortal',
 
     #frameworks
     'import_export',
@@ -80,6 +81,9 @@ REST_AUTH_SERIALIZERS = {
 REST_AUTH_REGISTER_SERIALIZERS = {
     "REGISTER_SERIALIZER": "users.serializers.UserProfileSerializer",
 }
+
+ACCOUNT_ADAPTER = 'users.adapter.CustomAccountAdapter'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -182,6 +186,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 AUTH_USER_MODEL = 'users.UserProfile'
-
+# LOGIN_URL = 'rest-auth/login/'
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 1025
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_USE_TLS = True
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = 'ishneetbhaatia0503@gmail.com'
+# EMAIL_HOST_PASSWORD = 'ibidem@GOOGLE0503'

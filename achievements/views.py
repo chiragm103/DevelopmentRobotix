@@ -6,8 +6,16 @@ from rest_framework.response import Response
 # Create your views here.
 
 @api_view()
-def achievement(request):
+def achievement_api(request):
     obj_achievements = Achievements.objects.all()
     serializer = AchievementSerializer(obj_achievements,many=True)
     dict = {'achievement':serializer.data}
     return Response(dict)
+
+
+def achievement(request):
+    obj_achievements = Achievements.objects.all()
+    # serializer = AchievementSerializer(obj_achievements,many=True)
+    dict = {'achievement':obj_achievements}
+    # return Response(dict)
+    return render(request,'achievements.html',context=dict)

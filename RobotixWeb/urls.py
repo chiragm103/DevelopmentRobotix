@@ -19,7 +19,7 @@ from . import views
 from django.conf.urls.static import static
 from django.conf import settings
 from allauth.account.views import confirm_email
-from rest_auth.views import LoginView
+# from rest_auth.views import LoginView
 urlpatterns = [
     path('devtainsaan/', admin.site.urls),
     path('',views.index,name='index'),
@@ -31,9 +31,11 @@ urlpatterns = [
     path('info/',include('extras.urls')),
     path('alumni/',include('alumni.urls')),
     path('webteam',views.webteam,name='webteam'),
+    path('', include('django.contrib.auth.urls')), 
     # path('form',views.form,name='form'),
     path('profiles/',include('users.urls')),
     path('rest-auth/registration/', include('rest_auth.registration.urls')),
     path('rest-auth/',include('rest_auth.urls')),
-    path('accounts-rest/registration/account-confirm-email/<key>/', LoginView.as_view(), name='account_confirm_email'),
+    path('robothon/',include('roboPortal.urls')),
+    # path('accounts-rest/registration/account-confirm-email/<key>/', LoginView.as_view(), name='account_confirm_email'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
