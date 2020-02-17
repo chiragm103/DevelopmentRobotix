@@ -1,0 +1,9 @@
+<h1>Sponsor Page</h1>
+{% for sponsor in all_sponsors %}
+  {{sponsor.name}} <br>
+  {{sponsor.sponsor_type}}<br>
+  <a href="{{sponsor.website}}" target="_blank">Sponsors Website</a><br>
+  {{sponsor.phone_number}}<br>
+  <img src="{{sponsor.logo.url}}" width="400px" height="500px"><br>
+  <br>
+{% endfor %}

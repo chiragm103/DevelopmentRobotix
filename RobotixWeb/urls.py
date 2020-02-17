@@ -13,14 +13,22 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from rest_framework import routers
 from django.contrib import admin
 from django.urls import path,include
 from . import views
 from django.conf.urls.static import static
 from django.conf import settings
 from allauth.account.views import confirm_email
+from new_pages.views import sponsors,api_sponsors,abstract_robothon,abstract_expo,api_fest_expo,api_fest_robothon
 # from rest_auth.views import LoginView
+router = routers.DefaultRouter()
+router.register(r'sponsors', api_sponsors)
+router.register(r'robofest/roboexpo', api_fest_expo)
+router.register(r'robofest/robothon', api_fest_robothon)
+
 urlpatterns = [
+    path('api/', include(router.urls)),
     path('devtainsaan/', admin.site.urls),
     path('',views.index,name='index'),
     path('aboutus/',include('about.urls')),
@@ -37,5 +45,8 @@ urlpatterns = [
     path('rest-auth/registration/', include('rest_auth.registration.urls')),
     path('rest-auth/',include('rest_auth.urls')),
     path('robothon/',include('roboPortal.urls')),
+    path('sponsors/',sponsors, name= "sponsors"),
+    path('robofest/roboexpo/',abstract_expo, name="abstract_expo"),
+    path('robofest/robothon/',abstract_robothon, name="abstract_robothon"),
     # path('accounts-rest/registration/account-confirm-email/<key>/', LoginView.as_view(), name='account_confirm_email'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
