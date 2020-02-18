@@ -29,42 +29,63 @@ def randomString(stringLength=10):
 
 @login_required(login_url='/rest-auth/login/')
 def home(request):
-    if request.user.portal.joined_team == False:
-        if 'create' in request.POST:
-            name = request.POST['teamName']
-            team = Team(admin = request.user,name = name)
-            team.save()
-            team.member.add(request.user)
-            token = randomString(15)
-            token += str(team.id)
-            temp_id = team.id
-            team.token = token
-            team.save()
-            portal_user = portalUser.objects.get(user = request.user)
-            portal_user.joined_team = True
-            portal_user.user_team_id = int(temp_id)
-            portal_user.is_admin = True
-            portal_user.save()
-            message = "Team has been created"
-            return render(request,'team.html',{'team':team,'message':message})
-        if 'join' in request.POST:
-            token = request.POST['token']
-            try:
-                team = Team.objects.get(token = token)
+    if request.user.portal.is_complete:
+        if request.user.portal.joined_team == False:
+            if 'create' in request.POST:
+                name = request.POST['teamName']
+                team = Team(admin = request.user,name = name)
+                team.save()
                 team.member.add(request.user)
-                portal = portalUser.objects.get(user = request.user)
-                portal.joined_team = True
-                portal.user_team_id = team.id
-                portal.save()
-                message = "Sucessfully added to team " + team.name
+                token = randomString(15)
+                token += str(team.id)
+                temp_id = team.id
+                team.token = token
+                team.save()
+                portal_user = portalUser.objects.get(user = request.user)
+                portal_user.joined_team = True
+                portal_user.user_team_id = int(temp_id)
+                portal_user.is_admin = True
+                portal_user.save()
+                message = "Team has been created"
                 return render(request,'team.html',{'team':team,'message':message})
-            except Team.DoesNotExist:
-                message = "Invalid Team Token"
-                return render(request,'joinCreate.html',{'message':message})
-        return render(request,'joinCreate.html')
+            if 'join' in request.POST:
+                token = request.POST['token']
+                try:
+                    team = Team.objects.get(token = token)
+                    team.member.add(request.user)
+                    portal = portalUser.objects.get(user = request.user)
+                    portal.joined_team = True
+                    portal.user_team_id = team.id
+                    portal.save()
+                    message = "Sucessfully added to team " + team.name
+                    return render(request,'team.html',{'team':team,'message':message})
+                except Team.DoesNotExist:
+                    message = "Invalid Team Token"
+                    return render(request,'joinCreate.html',{'message':message})
+            return render(request,'joinCreate.html')
+        else:
+            team = Team.objects.get(id = request.user.portal.user_team_id)
+            return render(request,'team.html',{'team':team})
     else:
-        team = Team.objects.get(id = request.user.portal.user_team_id)
-        return render(request,'team.html',{'team':team})
+        if 'create' in request.POST:
+            portal = portalUser.objects.get(user = request.user)
+            resume = None
+            if 'resume' in request.FILES:
+                resume = request.FILES['resume']
+            description = request.POST['description']
+            college = request.POST['college']
+            branch = request.POST['branch']
+            semester = request.POST['semester']
+            portal.description = description
+            portal.resume = resume
+            portal.college = college
+            portal.branch = branch
+            portal.semester = semester
+            portal.is_complete = True
+            portal.save()
+            redirect('/robothon/')
+
+        return render(request,'createProfile.html',{'message':"Please complete your details first"})
 
 
 @api_view(['GET','POST'])
@@ -208,7 +229,6 @@ def createProfile(request):
         return HttpResponse("Updated")
 
     return render(request,'createProfile.html')
-
 @login_required
 def adminView(request):
     if request.user.portal.is_member == True:

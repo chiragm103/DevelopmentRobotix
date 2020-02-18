@@ -20,7 +20,7 @@ from . import views
 from django.conf.urls.static import static
 from django.conf import settings
 from allauth.account.views import confirm_email
-from new_pages.views import sponsors,api_sponsors,abstract_robothon,abstract_expo,api_fest_expo,api_fest_robothon
+from new_pages.views import sponsors,api_sponsors,abstract_robothon,abstract_expo,api_fest_expo,api_fest_robothon, verify_user
 # from rest_auth.views import LoginView
 router = routers.DefaultRouter()
 router.register(r'sponsors', api_sponsors)
@@ -30,6 +30,7 @@ router.register(r'robofest/robothon', api_fest_robothon)
 urlpatterns = [
     path('api/', include(router.urls)),
     path('devtainsaan/', admin.site.urls),
+    path('verify_user/<str:key>/',verify_user, name="verify_user"),
     path('',views.index,name='index'),
     path('aboutus/',include('about.urls')),
     path('events/',include('events.urls')),

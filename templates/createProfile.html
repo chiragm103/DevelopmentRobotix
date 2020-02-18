@@ -1,8 +1,17 @@
-<form action="{% url 'portal:createProfile' %}" enctype="multipart/form-data" method="POST">
+
+{% if message %}
+    {{message}}
+{% endif %}
+    
+<form action="{% url 'portal:home' %}" enctype="multipart/form-data" method="POST">
     {% csrf_token %}
     <label for="file">ADD RESUME:</label><input type="file" id="file" name="resume">
     <br>
     <br>
+    <label for="college">College</label> <input type="text" id="college" name="college">
+    <label for="branch">Branch</label> <input type="text" id="branch" name="branch">
+    <label for="semester">Semester</label> <input type="number" min="0" step="1" id="semester" name="semester">
+
     <textarea name="description" id="description" cols="30" rows="10"></textarea><br>
     <button name="create">Submit Detail</button>
 </form>
