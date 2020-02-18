@@ -31,8 +31,8 @@ class UserProfile(AbstractBaseUser,PermissionsMixin):
     phone_no = models.CharField(max_length=20)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+    currency = models.IntegerField(default=1000)
     objects = UserProfileManager()
-
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name','phone_no']
 
