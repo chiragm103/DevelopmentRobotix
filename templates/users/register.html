@@ -3,168 +3,41 @@
         <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert">{{ message }}</div>
     {% endfor %}
 {% endif %}
+
+{% if msg %}
+    {{msg}}
+{% endif %}
+<div id="emailVal"></div>
+
 <form action="/profiles/register/" method="POST">
     {% csrf_token %}
-    <input type="email" id="email" name="email" placeholder="email">
+    <input type="email" id="email" name="email" placeholder="email"  oninput="emailValidate()">
     <input type="text" id = "name"name="name" placeholder="name">
     <input type="number" id="phone_no"  name="phone_no" placeholder="phone number">
     <input type="password" id="password" name="password" placeholder="password">
     <input type="password" id="password1" name="password1" placeholder="confirm password">
     <button name="register" >REGISTER</button><!--onclick="return validate()"-->
     </form>
-<script>
-//password checker
-    var m_strUpperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-var m_strLowerCase = "abcdefghijklmnopqrstuvwxyz";
-var m_strNumber = "0123456789";
-var m_strCharacters = "!@#$%^&*?_~"
+    <script>
+        function emailValidate() {
+            email = document.getElementById("email");
+            div = document.getElementById("emailVal")
 
-function checkPassword(strPassword)
-{
-    // Reset combination count
-    var nScore = 0;
-
-    // Password length
-    // -- Less than 4 characters
-    if (strPassword.length < 5)
-    {
-        nScore += 5;
+            url = "/profiles/email_exists/" + email.value+ "/";
+      var req = new XMLHttpRequest();
+      req.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            if (req.responseText == "true")
+         {
+            div.innerHTML = "Email already exists"
+         } 
+         else
+         {
+            div.innerHTML = ""
+         }
+        }
+      };
+      req.open("GET", url, true);
+      req.send();
     }
-    // -- 5 to 7 characters
-    else if (strPassword.length > 4 && strPassword.length < 8)
-    {
-        nScore += 10;
-    }
-    // -- 8 or more
-    else if (strPassword.length > 7)
-    {
-        nScore += 25;
-    }
-
-    // Letters
-    var nUpperCount = countContain(strPassword, m_strUpperCase);
-    var nLowerCount = countContain(strPassword, m_strLowerCase);
-    var nLowerUpperCount = nUpperCount + nLowerCount;
-    // -- Letters are all lower case
-    if (nUpperCount == 0 && nLowerCount != 0) 
-    { 
-        nScore += 10; 
-    }
-    // -- Letters are upper case and lower case
-    else if (nUpperCount != 0 && nLowerCount != 0) 
-    { 
-        nScore += 20; 
-    }
-
-    // Numbers
-    var nNumberCount = countContain(strPassword, m_strNumber);
-    // -- 1 number
-    if (nNumberCount == 1)
-    {
-        nScore += 10;
-    }
-    // -- 3 or more numbers
-    if (nNumberCount >= 3)
-    {
-        nScore += 20;
-    }
-
-    // Characters
-    var nCharacterCount = countContain(strPassword, m_strCharacters);
-    // -- 1 character
-    if (nCharacterCount == 1)
-    {
-        nScore += 10;
-    }   
-    // -- More than 1 character
-    if (nCharacterCount > 1)
-    {
-        nScore += 25;
-    }
-
-    // Bonus
-    // -- Letters and numbers
-    if (nNumberCount != 0 && nLowerUpperCount != 0)
-    {
-        nScore += 2;
-    }
-    // -- Letters, numbers, and characters
-    if (nNumberCount != 0 && nLowerUpperCount != 0 && nCharacterCount != 0)
-    {
-        nScore += 3;
-    }
-    // -- Mixed case letters, numbers, and characters
-    if (nNumberCount != 0 && nUpperCount != 0 && nLowerCount != 0 && nCharacterCount != 0)
-    {
-        nScore += 5;
-    }
-
-
-    return nScore;
-}
-// Checks a string for a list of characters
-function countContain(strPassword, strCheck)
-{ 
-    // Declare variables
-    var nCount = 0;
-
-    for (i = 0; i < strPassword.length; i++) 
-    {
-        if (strCheck.indexOf(strPassword.charAt(i)) > -1) 
-        { 
-                nCount++;
-        } 
-    } 
-
-    return nCount; 
-} 
-//password checker
-function emailValidator(url)
-{
-    var req = new XMLHttpRequest();
-    req.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-     if (req.responseText == "true")
-     {
-        alert("Email address already exists");
-        temp = false;
-        return "false"
-     } 
-     else
-     {
-         return true
-     }
-    }
-  };
-  req.open("GET", url, true);
-  req.send();
-}
-    function validate() {
-  email = document.getElementById("email")
-  password = document.getElementById("password")
-  password1 = document.getElementById("password1")
-  a = checkPassword(password.value);
-  temp = true
-  url = "/profiles/email_exists/" + email.value+ "/";
-  alert(url)
-  if (password1.value != password.value)
-  {
-      alert("Passwords do not match");
-      temp = false;
-      return false;
-  }
-  else if(a < 65)
- {
-    alert("Password too weak");
-    temp = false;
-    return false;
- }
- else if(emailValidator(url) == false)
- {
-     alert("Email already exists");
-     temp = false
-     return false
- }
-  return temp;
-}
-</script>
+    </script>

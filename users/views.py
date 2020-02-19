@@ -46,11 +46,19 @@ def accountView(request):
     return render(request,'confirm.html')
 
 def loginView(request,message = None):
+    if 'login' in request.POST:
+        email = request.POST['email']
+        password = request.POST['password']
+        payload = {'email':email,'password':password}
+        response = rq.post('http://127.0.0.1:8000/rest-auth/login/', json= payload)
+        if response.status_code == 200 or response.status_code == 201:
+            return redirect('/robothon/')
+        elif response.status_code == 400 or response.status_code == 404:
+            msg = "Invalid Credential"
+            return render(request,'users/login.html',{'msg':msg})
     return render(request,'users/login.html')
 
 def registerView(request):
-    pass
-    message = None
     if 'register' in request.POST:
         email = request.POST['email']
         name = request.POST['name']
@@ -58,11 +66,14 @@ def registerView(request):
         password = request.POST['password']
         password1 = request.POST['password1']
         payload = {'email':email,'name':name,'phone_no':phone_no,'password':password,'password1':password1}
-        my_response = rq.post('http://127.0.0.1:8000/rest-auth/registration/', json= payload)
-        data = my_response.json()
-        if data['detail'] and data['detail'] == "Verification e-mail sent.":
+        response = rq.post('http://127.0.0.1:8000/rest-auth/registration/', json= payload)
+        #data = my_response.json()
+        if response.status_code == 200 or response.status_code == 201:
             messages.success(request, 'A verification email has been sent. Please verify and login')
             return redirect('/profiles/login/')
+        elif response.status_code == 400 or response.status_code == 404:
+            msg = "Invalid Credential"
+            return render(request,'users/register.html',{'msg':msg})
     return render(request,'users/register.html')
 def email_exists(request,email):
     if UserProfile.objects.filter(email = email).exists() :
