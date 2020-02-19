@@ -110,5 +110,21 @@ def forgot_change(request, uid, token):
         else:
             return render(request,'users/forgot_change.html',{'uid':uid,'token':token,'msg':"Invalid credentials"})
     return render(request,'users/forgot_change.html',{'uid':uid,'token':token})
+def change(request):
+    pass
+    """
+    if request.method == "POST":
+        cur_password = request.POST['cur_password']
+        password1 = request.POST['password1']
+        password2 = request.POST['password2']
+        user = auth.authenticate(email = request.user.email,password = cur_password)
+        if user != None:
+
+            return HttpResponse("Password Sucessively changed")
+        else:
+            return render(request,'change.html',{'message':"Invalid password"})
+        
+    return render(request,'change.html')
+    """
 
 
