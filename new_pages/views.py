@@ -5,13 +5,14 @@ from .models import SponsorSerializer,robothonAbstract,roboExpoAbstract,Robothon
 from rest_framework import viewsets
 import requests as rq
 
+
 def sponsors(request):
     all_sponsors = Spons.objects.all()
     return render(request,'new_page/sponsors.html',{'all_sponsors':all_sponsors})
 def verify_user(request,key):
     print(key)
     payload = {'key':key}
-    my_response =rq.post('http://127.0.0.1:8000/rest-auth/registration/verify-email/', json= payload)
+    my_response =rq.post('http://127.0.0.1:8000/rest-auth/registration/verify-email/', json= payload)#change to robotix.nitrr.ac.in before pushing to server
     data = my_response.json()
     if data['detail'] == "ok":
         return HttpResponse("verified")
