@@ -200,3 +200,5 @@ AUTH_USER_MODEL = 'users.UserProfile'
 # LOGIN_URL = 'rest-auth/login/'
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 1025
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
+
