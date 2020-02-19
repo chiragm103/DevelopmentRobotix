@@ -1,12 +1,21 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from . models import sponsors as Spons
 from .models import SponsorSerializer,robothonAbstract,roboExpoAbstract,RobothonSerializer,RoboExpoSerializer
 from rest_framework import viewsets
+import requests as rq
 
 def sponsors(request):
     all_sponsors = Spons.objects.all()
     return render(request,'new_page/sponsors.html',{'all_sponsors':all_sponsors})
+def verify_user(request,key):
+    payload = {'key':key}
+    my_response =rq.post('http://127.0.0.1:8000/rest-auth/registration/verify-email/', json= payload)
+    data = my_response.json()
+    if data['detail'] == "ok":
+        return HttpResponse("verified")
+    else:
+        raise Http404("Unable to verify")
 class api_sponsors(viewsets.ModelViewSet):
     queryset = Spons.objects.all()
     serializer_class = SponsorSerializer

@@ -8,6 +8,10 @@ User = settings.AUTH_USER_MODEL
 class portalUser(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL,related_name="portal",on_delete= models.CASCADE)
     # verified = models.BooleanField(default= False)
+    is_complete = models.BooleanField(default= False)
+    college = models.CharField(max_length= 150, null= True, blank= True)
+    branch = models.CharField(max_length= 150, null= True, blank= True)
+    semester = models.IntegerField(null= True, blank= True)
     resume = models.FileField(null= True, blank= True)
     description = models.TextField(blank= True,null= True)
     joined_team = models.BooleanField(default= False)

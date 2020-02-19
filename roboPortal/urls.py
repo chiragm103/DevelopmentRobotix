@@ -20,8 +20,8 @@ app_name = 'portal'
 urlpatterns = [
     path('',views.home,name= "home"),
     path('api/',views.home_api,name= "home_api"),
-    # path('createProfile/', views.createProfile, name="createProfile"),
-    # path('adminView/',views.adminView, name= "adminView"),
-    # path('profileView/<int:user_id>/',views.profileView, name= "profileView"),
-    # path('select/<int:team_id>',views.select, name="select"),
+    path('createProfile/', views.createProfile, name="createProfile"),
+    path('adminView/',views.adminView, name= "adminView"),
+    path('profileView/<int:user_id>/',views.profileView, name= "profileView"),
+    path('select/<int:team_id>',views.select, name="select"),
 ]
