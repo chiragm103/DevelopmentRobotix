@@ -42,7 +42,10 @@ def accountView(request):
     return render(request,'confirm.html')
 
 def loginView(request):
-    pass
+    return render(request,'users/login.html')
 
 def registerView(request):
     pass
+    if 'register' in request.POST:
+        
+        return render(request,'users/register.html')
