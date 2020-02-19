@@ -1,0 +1,11 @@
+
+{% if message %}
+    {{message}}
+{% endif %}
+    
+<form action="/profiles/change/">
+    <input type="password" placeholder="current password" name="cur_password">
+    <input type="password" placeholder="new password" name="password1">
+    <input type="password" placeholder="confirm new password" name="password2">
+    <button name="change">SUBMIT</button>
+</form>

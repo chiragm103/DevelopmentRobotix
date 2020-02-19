@@ -22,7 +22,7 @@ from django.conf import settings
 from allauth.account.views import confirm_email
 from new_pages.views import sponsors,api_sponsors,abstract_robothon,abstract_expo,api_fest_expo,api_fest_robothon, verify_user
 from django.contrib.auth.views import LogoutView
-
+from users.views import forgot_change
 # from rest_auth.views import LoginView
 router = routers.DefaultRouter()
 router.register(r'sponsors', api_sponsors)
@@ -31,6 +31,7 @@ router.register(r'robofest/robothon', api_fest_robothon)
 
 urlpatterns = [
     path('logout/', LogoutView.as_view(), name="logout"),
+    path('reset/<str:uid>/<str:token>/',forgot_change, name="forgot_change"),
     path('rest-auth/registration/account-confirm-email/<str:key>/',verify_user, name="verify_user"),#over ride the rest auth urls
     path('api/', include(router.urls)),
     path('devtainsaan/', admin.site.urls),
