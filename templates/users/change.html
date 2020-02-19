@@ -3,7 +3,8 @@
     {{message}}
 {% endif %}
     
-<form action="/profiles/change/">
+<form action="/profiles/change/" method="POST">
+    {% csrf_token %}
     <input type="password" placeholder="current password" name="cur_password">
     <input type="password" placeholder="new password" name="password1">
     <input type="password" placeholder="confirm new password" name="password2">

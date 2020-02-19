@@ -11,6 +11,7 @@ from rest_framework.permissions import IsAuthenticated
 import requests as rq
 from django.contrib import messages
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 class UserProfileViewSet(viewsets.ModelViewSet):
@@ -110,21 +111,24 @@ def forgot_change(request, uid, token):
         else:
             return render(request,'users/forgot_change.html',{'uid':uid,'token':token,'msg':"Invalid credentials"})
     return render(request,'users/forgot_change.html',{'uid':uid,'token':token})
+@login_required
 def change(request):
-    pass
-    """
+
     if request.method == "POST":
         cur_password = request.POST['cur_password']
         password1 = request.POST['password1']
         password2 = request.POST['password2']
         user = auth.authenticate(email = request.user.email,password = cur_password)
         if user != None:
-
-            return HttpResponse("Password Sucessively changed")
+            if password1 == password2:
+                user.set_password(password1)
+                user.save()
+                return HttpResponse("Password Sucessively changed")
+            else:
+                return render(request,'users/change.html',{'message':"Passwords do not match"})
         else:
-            return render(request,'change.html',{'message':"Invalid password"})
+            return render(request,'users/change.html',{'message':"Invalid password"})
         
-    return render(request,'change.html')
-    """
+    return render(request,'users/change.html')
 
 
