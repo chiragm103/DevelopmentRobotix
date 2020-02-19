@@ -61,6 +61,7 @@ def registerView(request):
         my_response = rq.post('http://127.0.0.1:8000/rest-auth/registration/', json= payload)
         data = my_response.json()
         if data['detail'] and data['detail'] == "Verification e-mail sent.":
+            messages.success(request, 'A verification email has been sent. Please verify and login')
             return redirect('/profiles/login/')
     return render(request,'users/register.html')
 def email_exists(request,email):
