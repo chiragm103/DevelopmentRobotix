@@ -28,9 +28,9 @@ router.register(r'robofest/roboexpo', api_fest_expo)
 router.register(r'robofest/robothon', api_fest_robothon)
 
 urlpatterns = [
+    path('rest-auth/registration/account-confirm-email/<str:key>/',verify_user, name="verify_user"),#over ride the rest auth urls
     path('api/', include(router.urls)),
     path('devtainsaan/', admin.site.urls),
-    path('verify_user/<str:key>/',verify_user, name="verify_user"),
     path('',views.index,name='index'),
     path('aboutus/',include('about.urls')),
     path('events/',include('events.urls')),
