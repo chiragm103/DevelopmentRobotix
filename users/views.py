@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from rest_framework import viewsets,status
 from rest_framework.response import Response
 from .models import UserProfile
+from django.contrib.auth.models import auth
 from .serializers import UserProfileSerializer
 from .serializers import UserDetailsSerializer as UD
 from rest_auth import views
@@ -49,6 +50,13 @@ def loginView(request,message = None):
     if 'login' in request.POST:
         email = request.POST['email']
         password = request.POST['password']
+        user = auth.authenticate(email= email, password = password)
+        if user != None:
+            auth.login(request,user)
+            return redirect('/robothon/')
+        else:
+            return render(request,'users/login.html',{'msg':"Invalid credentials"})
+        """
         payload = {'email':email,'password':password}
         response = rq.post('http://127.0.0.1:8000/rest-auth/login/', json= payload)
         if response.status_code == 200 or response.status_code == 201:
@@ -56,6 +64,7 @@ def loginView(request,message = None):
         elif response.status_code == 400 or response.status_code == 404:
             msg = "Invalid Credential"
             return render(request,'users/login.html',{'msg':msg})
+        """
     return render(request,'users/login.html')
 
 def registerView(request):
