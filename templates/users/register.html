@@ -7,13 +7,37 @@
 {% if msg %}
     {{msg}}
 {% endif %}
-    
+<div id="emailVal"></div>
+
 <form action="/profiles/register/" method="POST">
     {% csrf_token %}
-    <input type="email" id="email" name="email" placeholder="email">
+    <input type="email" id="email" name="email" placeholder="email"  oninput="emailValidate()">
     <input type="text" id = "name"name="name" placeholder="name">
     <input type="number" id="phone_no"  name="phone_no" placeholder="phone number">
     <input type="password" id="password" name="password" placeholder="password">
     <input type="password" id="password1" name="password1" placeholder="confirm password">
     <button name="register" >REGISTER</button><!--onclick="return validate()"-->
     </form>
+    <script>
+        function emailValidate() {
+            email = document.getElementById("email");
+            div = document.getElementById("emailVal")
+
+            url = "/profiles/email_exists/" + email.value+ "/";
+      var req = new XMLHttpRequest();
+      req.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            if (req.responseText == "true")
+         {
+            div.innerHTML = "Email already exists"
+         } 
+         else
+         {
+            div.innerHTML = ""
+         }
+        }
+      };
+      req.open("GET", url, true);
+      req.send();
+    }
+    </script>
