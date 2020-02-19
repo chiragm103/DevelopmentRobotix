@@ -77,10 +77,10 @@ def registerView(request):
         payload = {'email':email,'name':name,'phone_no':phone_no,'password':password,'password1':password1}
         response = rq.post('http://127.0.0.1:8000/rest-auth/registration/', json= payload)
         #data = my_response.json()
-        if response.status_code == 200 or response.status_code == 201:
+        if response.status_code in range(200,300):
             messages.success(request, 'A verification email has been sent. Please verify and login')
             return redirect('/profiles/login/')
-        elif response.status_code == 400 or response.status_code == 404:
+        elif response.status_code in range(400,500):
             msg = "Invalid Credential"
             return render(request,'users/register.html',{'msg':msg})
     return render(request,'users/register.html')
@@ -89,3 +89,26 @@ def email_exists(request,email):
         return HttpResponse("true")
     else:
         return HttpResponse("false")
+def forgot_password(request):
+    if 'forgot' in request.POST:
+        email = request.POST['email']
+        payload = {'email':email}
+        response =rq.post('http://127.0.0.1:8000/rest-auth/password/reset/', json= payload)
+        if response.status_code in range(200,300):
+            return HttpResponse("Confirmation Email sent to you")
+        else:
+            return render(request,'users/forgot.html',{'msg':"Invalid Credentials"})
+    return render(request,'users/forgot.html',{'msg':"Invalid Credentials"})
+def forgot_change(request, uid, token):
+    if request.method == "POST":
+        new_password1 = request.POST['new_password1']
+        new_password2 = request.POST['new_password2']
+        payload = {'new_password1':new_password1,'new_password2':new_password2,'uid':uid,'token':token}
+        response =rq.post('http://127.0.0.1:8000/rest-auth/password/reset/confirm/',json= payload)
+        if response.status_code in range(200,300):
+            return HttpResponse("Password for the given email id changed")
+        else:
+            return render(request,'users/forgot_change.html',{'uid':uid,'token':token,'msg':"Invalid credentials"})
+    return render(request,'users/forgot_change.html',{'uid':uid,'token':token})
+
+

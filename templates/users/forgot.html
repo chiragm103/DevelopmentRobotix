@@ -1,1 +1,5 @@
-<form action=""></form>
+<form action="/profiles/forgot_password/" method="POST">
+{% csrf_token %}
+<input type="email" placeholder="email" name="email">
+<button name="forgot">SUBMIT</button>
+</form>

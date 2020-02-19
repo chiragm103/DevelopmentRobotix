@@ -1,0 +1,9 @@
+{% if msg %}
+  {{msg}}
+{% endif %}
+<form action="/profiles/forgot_change/{{uid}}/{{token}}/" method="POST">
+    {% csrf_token %}
+    <input type="password" name="new_password1" placeholder="new password">
+    <input type="password" name="new_password2" placeholder="confirm new password">
+    <button >SUBMIT</button>
+</form>

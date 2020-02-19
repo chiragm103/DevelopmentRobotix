@@ -13,5 +13,6 @@ urlpatterns = [
     path('register/',registerView,name='account_signup'),
     #re_path(r'email_exists/(?P<data>\w+|[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})$',views.email_exists,name="email_exists"),
     path('email_exists/<str:email>/',views.email_exists, name="email_exists"),
-
+    path('forgot_password/',views.forgot_password, name="forgot_password"),
+    path('forgot_change/<str:uid>/<str:token>/',views.forgot_change, name="forgot_change" )
 ]
