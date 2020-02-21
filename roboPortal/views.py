@@ -261,6 +261,7 @@ def confirm(request,token):
     try:
         team = Team.objects.get(token = token)
         team.confirm = True
+        team.save()
         return HttpResponse("You have confiremed your arrival for robothon.")
     except team.DoesNotExist:
         raise Http404("Wrong Token")
