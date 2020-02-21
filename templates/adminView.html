@@ -1,0 +1,47 @@
+
+{% for team  in all_team %}
+    <ul>
+        <li><h1>{{ team.name }}</h1></li>
+        <h5>Team Lead: {{team.admin.name}}</h5>
+        <h3>Team Member</h3>
+        <ol>
+            
+            {% for user in team.member.all %}
+                <li><a href="{% url 'portal:profileView' user_id=user.id %}"> {{user.name}} </a> </li>
+            {% endfor %}
+                
+        </ol>
+        
+        {% if team.selected %}
+            <p>SELECTED</p>
+            {% else %}
+        <div id="team_select"><button id="select" value="{{team.id}}"onclick="select();">SELECT TEAM</button></div>
+        {% endif %}
+            
+    </ul>
+{% endfor %}
+<script>
+    function select() {
+    //alert("hii");
+    response_div = document.getElementById("team_select");
+    team_id = document.getElementById("select").value;
+    url = "/robothon/select/" + team_id;
+    //alert(url);
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        if ( xhttp.responseText == "ok" )
+            {
+                response_div.innerHTML = "<p>SELECTED</p>";
+            }
+        
+    }
+    else
+    {
+        response_div.innerHTML = "<p>Processing</p>";
+    }
+  };
+  xhttp.open("GET", url, true);
+  xhttp.send();
+}
+</script>

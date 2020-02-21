@@ -24,4 +24,5 @@ urlpatterns = [
     path('adminView/',views.adminView, name= "adminView"),
     path('profileView/<int:user_id>/',views.profileView, name= "profileView"),
     path('select/<int:team_id>',views.select, name="select"),
+    path('confirm/<str:token>/',views.confirm, name="confirm"),
 ]
