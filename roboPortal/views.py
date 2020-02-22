@@ -8,6 +8,8 @@ from .models import portalUser, Team
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import portalUserSerializer, teamserializer
+from users.models import UserProfile
+from django.template.loader import render_to_string
 
 
 subject_roboPortalVerification = 'Verify your Robo Portal Email Address. '
@@ -83,7 +85,7 @@ def home(request):
             portal.semester = semester
             portal.is_complete = True
             portal.save()
-            redirect('/robothon/')
+            return redirect('/robothon/')
 
         return render(request,'createProfile.html',{'message':"Please complete your details first"})
 
@@ -239,7 +241,7 @@ def adminView(request):
 
 @login_required
 def profileView(request,user_id):
-    user = User.objects.get(id = user_id)
+    user = UserProfile.objects.get(id = user_id)
     return render(request,'profile.html',{'profile_user':user})
 
 @login_required
@@ -252,8 +254,17 @@ def select(request,team_id):
     recipient_list = []
     for user in team.member.all():
         recipient_list.append(user.email)
-    send_mail( subject_robathon, message_robathon, email_from, recipient_list ,fail_silently=False )
+    msg_html = render_to_string('email/email.html', {'name': team.name,'token': team.token})
+    send_mail( subject_robathon, message_robathon, email_from, recipient_list ,html_message =msg_html,fail_silently=False )
     return HttpResponse("ok")
+def confirm(request,token):
+    try:
+        team = Team.objects.get(token = token)
+        team.confirm = True
+        team.save()
+        return HttpResponse("You have confiremed your arrival for robothon.")
+    except team.DoesNotExist:
+        raise Http404("Wrong Token")
 """
 def create(request):
     team = Team(admin = request.user)

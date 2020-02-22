@@ -19,7 +19,7 @@ class portalUser(models.Model):
     is_admin = models.BooleanField(default= False)#team admin
     is_member = models.BooleanField(default= False)#robotics team member
     def __str__(self):
-        return self.user.name + " extended portalUser class"
+        return self.user.email + " extended portalUser class"
 
     USERNAME_FIELD = 'email'
 
@@ -37,6 +37,7 @@ class Team(models.Model):
     member = models.ManyToManyField(User, related_name= "member")
     token = models.CharField(max_length= 100,null= True, blank= True)
     selected = models.BooleanField(default= False)
+    confirmed = models.BooleanField(default= False)
     def __str__(self):
         return "Team" + self.name
 # Create your models here.
